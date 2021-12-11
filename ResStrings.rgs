@@ -1,0 +1,26 @@
+HKCR
+{
+	MLResUtil.ResStrings.1 = s 'ResStrings Class'
+	{
+		CLSID = s '{E9B28F52-411C-11D5-BEA7-0020182C1E5C}'
+	}
+	MLResUtil.ResStrings = s 'ResStrings Class'
+	{
+		CLSID = s '{E9B28F52-411C-11D5-BEA7-0020182C1E5C}'
+		CurVer = s 'MLResUtil.ResStrings.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E9B28F52-411C-11D5-BEA7-0020182C1E5C} = s 'ResStrings Class'
+		{
+			ProgID = s 'MLResUtil.ResStrings.1'
+			VersionIndependentProgID = s 'MLResUtil.ResStrings'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E9B28F41-411C-11D5-BEA7-0020182C1E5C}'
+		}
+	}
+}

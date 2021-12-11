@@ -1,0 +1,107 @@
+// MLResUtil.idl : IDL source for MLResUtil.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (MLResUtil.tlb) and marshalling code.
+
+midl_pragma warning( disable: 2039 )   // interface does not conform to [oleautomation] attribute
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+	[
+		object,
+		uuid(E9B28F4F-411C-11D5-BEA7-0020182C1E5C),
+		dual,
+		helpstring("IResString Interface"),
+		pointer_default(unique)
+	]
+	interface IResString : IDispatch
+	{
+		[propget, id(1), helpstring("property Text")] HRESULT Text([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property Text")] HRESULT Text([in] BSTR newVal);
+		[propget, id(2), helpstring("property ResId")] HRESULT ResId([out, retval] long *pVal);
+		[propput, id(2), helpstring("property ResId")] HRESULT ResId([in] long newVal);
+		[propget, id(3), helpstring("property LocaleId")] HRESULT LocaleId([out, retval] long *pVal);
+		[propput, id(3), helpstring("property LocaleId")] HRESULT LocaleId([in] long newVal);
+		[propget, id(4), helpstring("property CombinedId (top 16 bits:LocaleId, bottom 16 bits:ResId) in")] HRESULT CombinedId([out, retval] long *pVal);
+		[propget, id(5), helpstring("property Length")] HRESULT Length([out, retval] long *pVal);
+	};
+	[
+		object,
+		uuid(E9B28F51-411C-11D5-BEA7-0020182C1E5C),
+		dual,
+		helpstring("IResStrings Interface"),
+		pointer_default(unique)
+	]
+	interface IResStrings : IDispatch
+	{
+		[propget, id(-4), restricted, helpstring("property _NewEnum")] HRESULT _NewEnum([out, retval] IEnumVARIANT* *pVal);
+		[propget, id(0), helpstring("property Item")] HRESULT Item([in] VARIANT Index, [out, retval] IResString* *pVal);
+		[propget, id(1), helpstring("property Count")] HRESULT Count([out, retval] long *pVal);
+		[id(2), helpstring("method Add")] HRESULT Add([in] IResString* NewResString);
+		[id(3), helpstring("method Remove")] HRESULT Remove([in] VARIANT Index);
+		[id(4), helpstring("method Clear")] HRESULT Clear();
+		[id(5), helpstring("method SortById")] HRESULT SortById();
+		[propget, id(6), helpstring("same as Item, but parameter is long not variant (easier in C++)")] HRESULT Item2(long Index, [out, retval] IResString* *pVal);
+		[id(7), helpstring("method Exists")] HRESULT Exists([in] long LocaleId, [in] long ResId, [out, retval] VARIANT_BOOL* StringExists);
+		[propget, id(8), helpstring("Returns an array of all Locales in the resource file.")] HRESULT Locales([out, retval] VARIANT *pVal);
+		[propget, id(9), helpstring("Private Dirty property used internally by CResFile"), hidden, restricted] HRESULT Dirty([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(9), helpstring("Private Dirty property used internally by CResFile"), hidden, restricted] HRESULT Dirty([in] VARIANT_BOOL newVal);
+		[id(10), helpstring("method GetByLocaleAndResId")] HRESULT GetByLocaleAndResId([in] long LocaleId, [in] long ResId, [out, retval] IResString** pVal);
+	};
+	[
+		object,
+		uuid(E9B28F55-411C-11D5-BEA7-0020182C1E5C),
+		dual,
+		helpstring("IResFile Interface"),
+		pointer_default(unique)
+	]
+	interface IResFile : IDispatch
+	{
+		[propget, id(1), helpstring("property Filename")] HRESULT Filename([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property Filename")] HRESULT Filename([in] BSTR newVal);
+		[id(2), helpstring("method Import")] HRESULT Import();
+		[id(3), helpstring("method Export")] HRESULT Export([in, optional, defaultvalue(FALSE)] VARIANT_BOOL PreserveStrings);
+		[propget, id(4), helpstring("property Strings")] HRESULT Strings([out, retval] IResStrings* *pVal);
+		[id(5), helpstring("method SaveAsNewFile")] HRESULT SaveAsNewFile();
+		[propget, id(6), helpstring("Returns an array of all Locales in the resource file.")] HRESULT Locales([out, retval] VARIANT *pVal);
+		[propget, id(7), helpstring("property Dirty")] HRESULT Dirty([out, retval] VARIANT_BOOL *pVal);
+		[id(8), helpstring("method MakeDirty")] HRESULT MakeDirty();
+	};
+
+[
+	uuid(E9B28F41-411C-11D5-BEA7-0020182C1E5C),
+	version(1.0),
+	helpstring("JOLLANS Software - Resource file utilities")
+]
+library MLRESUTILLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(E9B28F50-411C-11D5-BEA7-0020182C1E5C),
+		helpstring("ResString Class")
+	]
+	coclass ResString
+	{
+		[default] interface IResString;
+	};
+	[
+		uuid(E9B28F52-411C-11D5-BEA7-0020182C1E5C),
+		helpstring("ResStrings Class")
+	]
+	coclass ResStrings
+	{
+		[default] interface IResStrings;
+	};
+	[
+		uuid(E9B28F56-411C-11D5-BEA7-0020182C1E5C),
+		helpstring("ResFile Class")
+	]
+	coclass ResFile
+	{
+		[default] interface IResFile;
+	};
+};
